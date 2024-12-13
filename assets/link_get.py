@@ -1,74 +1,89 @@
+import re
 import requests
-import logging
-import random
-import os
 
-# Настройка логгирования
-logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger("GoogleVideoUtils")
-
-class GoogleVideoUtils:
-    # Маппинг символов из Java-кода
-    letters_list_a = list('uzpkfa50vqlgb61wrmhc72xsnid83ytjo94-')
-    letters_list_b = list('0123456789abcdefghijklmno-pqrstuvwxyz-')
-    letters_map = dict(zip(letters_list_a, letters_list_b))
-
-    @staticmethod
-    def generate_google_video_domains(count=19):
-        domains = []
-
-        # Удаляем файл, если он уже существует
-        if os.path.exists("links.txt"):
-            os.remove("links.txt")
-
-        for _ in range(count):
-            cluster_codename = GoogleVideoUtils.generate_random_codename()
-            cluster_name = GoogleVideoUtils.convert_cluster_codename(cluster_codename)
-            auto_gcs = GoogleVideoUtils.build_auto_gcs(cluster_name)
-            logger.info(f"Сгенерированный домен: {auto_gcs}")
-            domains.append(auto_gcs)
-
-        # Дополнительные статичные домены без изменений
-        extra_domains = [
-            "www.youtube.com",
-            "yt3.ggpht.com",
-            "yt4.ggpht.com",
-            "i.ytimg.com",
-            "manifest.googlevideo.com",
-            "signaler-pa.googlevideo.com",
+def generate_google_video_domain():
+    def get_cluster_codename():
+        urls = [
+            "https://redirector.gvt1.com/report_mapping?di=no",
+            "https://redirector.googlevideo.com/report_mapping?di=no"
         ]
-        domains.extend(extra_domains)
+        
+        letters_list_a = [
+            'u', 'z', 'p', 'k', 'f', 'a', '5', '0', 'v', 'q', 'l', 'g',
+            'b', '6', '1', 'w', 'r', 'm', 'h', 'c', '7', '2', 'x', 's',
+            'n', 'i', 'd', '8', '3', 'y', 't', 'o', 'j', 'e', '9', '4', '-'
+        ]
+        letters_list_b = [
+            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b',
+            'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
+            'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '-'
+        ]
+        letters_map = dict(zip(letters_list_a, letters_list_b))
+        
+        for url in urls:
+            try:
+                response = requests.get(url, timeout=2)
+                if response.status_code == 200:
+                    match = re.search(r"=>\s*(\S+)\s*(?:\(|:)", response.text)
+                    if match:
+                        cluster_codename = match.group(1).rstrip('.: ')
+                        
+                        # Преобразование кодового названия
+                        converted_name = ''.join(
+                            letters_map.get(char, '') for char in cluster_codename
+                        )
+                        
+                        # Формирование домена
+                        domain = f"rr1---sn-{converted_name}.googlevideo.com"
+                        return domain
+            except Exception as e:
+                print(f"Ошибка получения домена: {e}")
+        
+        return None
 
-        # Удаляем дубликаты доменов
-        unique_domains = list(set(domains))
+    # Предопределенный список доменов
+    predefined_domains = [
+        "www.youtube.com",
+        "manifest.googlevideo.com",
+        "i.ytimg.com",
+        "yt3.ggpht.com",
+        "yt4.ggpht.com",
+        "signaler-pa.youtube.com",
+        "jnn-pa.googleapis.com",
+        "rr1---sn-4axm-n8vs.googlevideo.com",
+        "rr1---sn-gvnuxaxjvh-o8ge.googlevideo.com",
+        "rr1---sn-ug5onuxaxjvh-p3ul.googlevideo.com", 
+        "rr1---sn-ug5onuxaxjvh-n8v6.googlevideo.com",
+        "rr4---sn-q4flrnsl.googlevideo.com",
+        "rr10---sn-gvnuxaxjvh-304z.googlevideo.com",
+        "rr14---sn-n8v7kn7r.googlevideo.com",
+        "rr16---sn-axq7sn76.googlevideo.com",
+        "rr1---sn-8ph2xajvh-5xge.googlevideo.com",
+        "rr1---sn-gvnuxaxjvh-5gie.googlevideo.com",
+        "rr12---sn-gvnuxaxjvh-bvwz.googlevideo.com",
+        "rr5---sn-n8v7knez.googlevideo.com",
+        "rr1---sn-u5uuxaxjvhg0-ocje.googlevideo.com",
+        "rr2---sn-q4fl6ndl.googlevideo.com", 
+        "rr5---sn-gvnuxaxjvh-n8vk.googlevideo.com",
+        "rr4---sn-jvhnu5g-c35d.googlevideo.com",
+        "rr1---sn-q4fl6n6y.googlevideo.com",
+        "rr2---sn-hgn7ynek.googlevideo.com"
+    ]
 
-        # Записываем в файл
-        with open("links.txt", "w") as file:
-            for domain in unique_domains:
-                file.write(f"{domain}\n")
-        logger.info(f"Доменов записано в links.txt: {len(unique_domains)}")
+    # Получаем новый домен
+    new_domain = get_cluster_codename()
+    
+    # Если новый домен получен, добавляем его к списку
+    if new_domain and new_domain not in predefined_domains:
+        predefined_domains.append(new_domain)
+    
+    # Сохраняем все домены в файл
+    with open('links.txt', 'w') as f:
+        for domain in predefined_domains:
+            f.write(domain + '\n')
+    
+    print(f"Сохранено доменов: {len(predefined_domains)}")
+    print("Новый домен:", new_domain if new_domain else "Не удалось получить")
 
-    @staticmethod
-    def generate_random_codename(length=10):
-        # Генерация случайного кодового имени из letters_list_a
-        while True:
-            codename = ''.join(random.choices(GoogleVideoUtils.letters_list_a, k=length))
-            if codename[-1] != '-':  # Проверка, чтобы последний символ не был дефисом
-                return codename
-
-    @staticmethod
-    def convert_cluster_codename(cluster_codename: str) -> str:
-        cluster_name_builder = []
-        for char in cluster_codename:
-            mapped_char = GoogleVideoUtils.letters_map.get(char)
-            if mapped_char:
-                cluster_name_builder.append(mapped_char)
-            else:
-                logger.warning(f"Символ '{char}' не найден в маппинге")
-        return ''.join(cluster_name_builder)
-
-    @staticmethod
-    def build_auto_gcs(cluster_name: str) -> str:
-        return f"rr1---sn-{cluster_name}.googlevideo.com"
-if __name__ == "__main__":
-    GoogleVideoUtils.generate_google_video_domains(count=19)
+# Запуск
+generate_google_video_domain()
