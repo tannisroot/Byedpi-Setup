@@ -76,7 +76,6 @@ def generate_google_video_domain():
         "fb.com",
         "proton.me",
         "thepiratebay.org",
-        "cdninstagram.com",
         "instagram.com",
         "rezka.ag",
         "discord.com",
