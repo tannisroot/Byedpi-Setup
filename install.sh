@@ -27,6 +27,7 @@ log() {
     esac
 }
 
+
 # Функция безопасного создания директории
 safe_mkdir() {
     local dir_path=$1
@@ -229,7 +230,7 @@ test_configurations() {
         
         log yellow "================================================"
         log yellow "Тестирование настройки [$setting_number/${#settings[@]}]"
-        log green "Настройка: $setting"
+        log green "Настройка: $setting
 
         # Создаем службу
         cat > "/etc/systemd/system/ciadpi.service" <<EOF
