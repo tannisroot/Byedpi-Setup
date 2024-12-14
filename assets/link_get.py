@@ -79,8 +79,8 @@ def generate_google_video_domain():
         for domain in predefined_domains:
             f.write(domain + '\n')
     
-    print(f"Сохранено доменов: {len(predefined_domains)}")
-    print("Новый домен:", new_domain if new_domain else "Не удалось получить")
+#    print(f"Сохранено доменов: {len(predefined_domains)}")
+#    print("Новый домен:", new_domain if new_domain else "Не удалось получить")
 
 # Запуск
 generate_google_video_domain()
