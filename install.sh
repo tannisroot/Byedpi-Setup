@@ -50,7 +50,7 @@ check_root() {
 
 # Проверка зависимостей
 check_dependencies() {
-    local dependencies=("curl" "unzip" "make" "gcc" "python3" "pip" "systemctl")
+    local dependencies=("curl" "unzip" "make" "gcc" "python3" "pip3" "systemctl")
     local missing_deps=()
 
     for dep in "${dependencies[@]}"; do
@@ -128,8 +128,6 @@ fetch_configuration_lists() {
     log yellow "Проверка файла settings.txt:"
     if [[ -f settings.txt ]]; then
         log green "Файл settings.txt существует"
-        log green "Содержимое settings.txt:"
-        cat settings.txt
         log green "Количество настроек: $(wc -l < settings.txt)"
     else
         log red "Файл settings.txt не найден"
@@ -138,8 +136,6 @@ fetch_configuration_lists() {
     log yellow "Проверка файла links.txt:"
     if [[ -f links.txt ]]; then
         log green "Файл links.txt существует"
-        log green "Содержимое links.txt:"
-        cat links.txt
         log green "Количество доменов: $(wc -l < links.txt)"
     else
         log red "Файл links.txt не найден"
