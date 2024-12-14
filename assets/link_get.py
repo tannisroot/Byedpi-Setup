@@ -99,7 +99,7 @@ def generate_google_video_domain():
         "rezka.ag",
         "xvideos.com",
         "www.xv-ru.com",
-        "pcnews.ru".
+        "pcnews.ru"
     ]
 
     # Получаем новый домен
