@@ -120,7 +120,7 @@ fetch_configuration_lists() {
     safe_download "$setup_repo" "$setup_zip"
     unzip -q "$setup_zip" -d "$TEMP_DIR"
 
-    cd "$TEMP_DIR/Byedpi-Setup-dev/assets" || exit 1
+    cd "$TEMP_DIR/Byedpi-Setup-main/assets" || exit 1
 
     pip install requests
     python3 link_get.py
