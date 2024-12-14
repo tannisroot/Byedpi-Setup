@@ -344,8 +344,6 @@ main() {
     trap 'log red "Скрипт прерван"; systemctl stop ciadpi 2>/dev/null || true; exit 1' SIGINT SIGTERM ERR
 
     log green "Начало установки ByeDPI"
-    rm -R /var/cache/ciadpi
-    rm -R /opt/ciadpi
     safe_mkdir "$TEMP_DIR"
     install_byedpi
     fetch_configuration_lists
