@@ -40,6 +40,9 @@ wget https://raw.githubusercontent.com/fatyzzz/Byedpi-Setup/refs/heads/main/inst
 
 Приветствуются пулл-реквесты и сообщения об ошибках. Пожалуйста, открывайте issues в разделе GitHub Issues.
 
+## 🔥 Отдельное спасибо:
+
+- romanvht: [GitHub](https://github.com/romanvht)
 ## 📞 Контакты
 
 - GitHub: [@fatyzzz](https://github.com/fatyzzz)
