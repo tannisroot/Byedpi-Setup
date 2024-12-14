@@ -64,7 +64,25 @@ def generate_google_video_domain():
         "rr5---sn-gvnuxaxjvh-n8vk.googlevideo.com",
         "rr4---sn-jvhnu5g-c35d.googlevideo.com",
         "rr1---sn-q4fl6n6y.googlevideo.com",
-        "rr2---sn-hgn7ynek.googlevideo.com"
+        "rr2---sn-hgn7ynek.googlevideo.com",
+        "googleapis.com",
+        "gstatic.com",
+        "play.google.com",
+        "rutor.info",
+        "rutracker.org",
+        "facebook.com",
+        "torproject.org",
+        "t.co",
+        "fb.com",
+        "proton.me",
+        "thepiratebay.org",
+        "instagram.com",
+        "rezka.ag",
+        "discord.com",
+        "finland10100.discord.media",
+        "hongkong11078.discord.media",
+        "rotterdam8003.discord.media",
+        "russia3872.discord.media",
     ]
 
     # Получаем новый домен
