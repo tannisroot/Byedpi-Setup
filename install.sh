@@ -327,14 +327,8 @@ EOF
         log green "- Успешно: $success_count из $total_count ($success_rate%)"
         log yellow "- Неудачно: ${#failed_links[@]}"
         
-        if [[ ${#failed_links[@]} -gt 0 ]]; then
-            log yellow "Список неудачных доменов:"
-            printf '%s\n' "${failed_links[@]}" | sort -u | while read -r link; do
-                log red "  - $link"
-            done
-        fi
-        
         log yellow "================================================"
+        echo
         ((setting_number++))
     done
 
@@ -403,7 +397,17 @@ main() {
     # Выводим отсортированные результаты
     for i in "${!filtered_results[@]}"; do
         IFS='#' read -r setting success_rate success_count total_count failed_count <<< "${filtered_results[i]}"
-        echo "$i) $setting (Успех: $success_rate%, $success_count/$total_count)"
+        
+        # Определяем цвет в зависимости от процента успеха
+        if ((success_rate >= 80)); then
+            color="${COLOR_GREEN}"
+        elif ((success_rate >= 50)); then
+            color="${COLOR_YELLOW}"
+        else
+            color="${COLOR_RED}"
+        fi
+        
+        echo -e "$i) ${color}$setting (Успех: $success_rate%, $success_count/$total_count, Неуспешно: $failed_count)${COLOR_RESET}"
     done
 
     read -p "Выберите номер конфигурации: " selected_index
