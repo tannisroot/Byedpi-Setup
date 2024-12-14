@@ -1,6 +1,7 @@
 -q1+s -s29+s -o5+s -f-1 -S -As
 -n www.google.com -d 1+s -O 1 -s 25+s -t 5
 -n www.google.com -d 1+s -O 1 -s 29+s -t 5
+-s1 -q1 -Y -Ar -s5 -o1+s -At -f-1 -r1+s -As -s1 -o1+s -s-1 -An
 -s1 -q1 -Y -At -T5 -b1000 -S -f-1 -r1+s -As
 --split 2 --disorder 3+sni --fake -1 --ttl 5
 -s0 -o1 -d1 -r1+s -Ar -o1 -At -f-1 -r1+s -As
