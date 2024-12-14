@@ -50,7 +50,7 @@ check_root() {
 
 # Проверка зависимостей
 check_dependencies() {
-    local dependencies=("curl" "unzip" "make" "gcc" "python3" "pip3" "systemctl")
+    local dependencies=("curl" "unzip" "make" "gcc" "python3" "pip" "systemctl")
     local missing_deps=()
 
     for dep in "${dependencies[@]}"; do
