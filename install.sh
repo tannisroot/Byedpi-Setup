@@ -230,7 +230,7 @@ test_configurations() {
         
         log yellow "================================================"
         log yellow "Тестирование настройки [$setting_number/${#settings[@]}]"
-        log green "Настройка: $setting
+        log green "Настройка: $setting"
 
         # Создаем службу
         cat > "/etc/systemd/system/ciadpi.service" <<EOF
@@ -247,7 +247,6 @@ RestartSec=5s
 [Install]
 WantedBy=multi-user.target
 EOF
-
         log green "Запускаем службу..."
         { systemctl daemon-reload && systemctl restart ciadpi; } || {
             log red "Ошибка запуска службы для настройки $setting, пропускаем..."
