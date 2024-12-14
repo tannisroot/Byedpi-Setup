@@ -253,8 +253,8 @@ EOF
             continue
         }
         
-        log yellow "Ожидание запуска службы (2 сек)..."  # Уменьшаем время ожидания
-        sleep 2
+        log yellow "Ожидание запуска службы (4 сек)..."  # Уменьшаем время ожидания
+        sleep 4
 
         local success_count=0
         local total_count=0
