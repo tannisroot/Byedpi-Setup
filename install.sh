@@ -277,7 +277,7 @@ EOF
                             -o /dev/null -s -w "%{http_code}" "$https_link" \
                             --connect-timeout 2 --max-time 3) || http_code="000"
 
-                if [[ "$http_code" == "200" || "$http_code" == "404" || "$http_code" == "400" || "$http_code" == "301" ]]; then
+                if [[ "$http_code" == "200" || "$http_code" == "404" || "$http_code" == "400" || "$http_code" == "403" || "$http_code" == "302" || "$http_code" == "301" ]]; then
                     log green "  ✓ OK ($https_link: $http_code)"
                     echo "success" > "$temp_dir/result_$domain_number"
                 else
