@@ -1,4 +1,4 @@
-# Byedpi-Setup DEV BRANCH! 🚀
+# Byedpi-Setup 🚀
 
 ## Описание проекта
 
@@ -16,7 +16,7 @@
 Просто выполните следующую команду в терминале:
 
 ```bash
-wget https://raw.githubusercontent.com/fatyzzz/Byedpi-Setup/refs/heads/dev/install.sh && bash install.sh
+wget https://raw.githubusercontent.com/fatyzzz/Byedpi-Setup/refs/heads/main/install.sh && bash install.sh
 ```
 
 ## 📋 Требования
