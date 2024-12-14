@@ -43,7 +43,7 @@ def generate_google_video_domain():
 
     # Предопределенный список доменов
     predefined_domains = [
-        "www.youtube.com",
+        "youtube.com",
         "manifest.googlevideo.com",
         "i.ytimg.com",
         "yt3.ggpht.com",
