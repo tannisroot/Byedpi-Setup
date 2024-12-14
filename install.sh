@@ -407,7 +407,7 @@ main() {
     # Выводим отсортированные результаты
     for i in "${!filtered_results[@]}"; do
         IFS='#' read -r setting success_rate success_count total_count failed_count <<< "${filtered_results[i]}"
-        echo "$i) $setting (Успех: $success_rate%, $success_count/$total_count, неудач: $failed_count)"
+        echo "$i) $setting (Успех: $success_rate%, $success_count/$total_count)"
     done
 
     read -p "Выберите номер конфигурации: " selected_index
@@ -420,7 +420,7 @@ main() {
     update_service "$port" "$selected_setting"
 
     log green "Установка ByeDPI завершена. Служба запущена с настройкой: $selected_setting"
-    log yelloe "Информация для подключения Socks5 прокси"
+    log yellow "Информация для подключения Socks5 прокси"
     log yellow "Айпи: 127.0.0.1"
     log yellow "Порт: $port"
     # Очистка временных файлов
