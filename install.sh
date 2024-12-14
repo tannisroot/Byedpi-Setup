@@ -221,7 +221,7 @@ test_configurations() {
     systemctl stop ciadpi 2>/dev/null || true
 
     local -a results=()
-    local max_parallel=10  # Увеличиваем количество параллельных проверок
+    local max_parallel=${#links[@]}  # Увеличиваем количество параллельных проверок
 
     # Перебираем настройки
     local setting_number=1
