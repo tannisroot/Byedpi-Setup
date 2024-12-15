@@ -253,8 +253,20 @@ EOF
             continue
         }
         
-        log yellow "Ожидание запуска службы (4 сек)..."  # Уменьшаем время ожидания
-        sleep 4
+
+        log yellow "Ожидание запуска службы..."
+        for i in {1..10}; do
+            if systemctl is-active --quiet ciadpi; then
+            log green "Служба успешно запущена"
+            break
+            fi
+            sleep 1
+        done
+
+        if ! systemctl is-active --quiet ciadpi; then
+            log red "Служба не запустилась для настройки $setting, пропускаем..."
+            continue
+        fi
 
         local success_count=0
         local total_count=0
