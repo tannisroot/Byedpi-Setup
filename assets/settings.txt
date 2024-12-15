@@ -1,4 +1,4 @@
--Kt,h -d1 -Y -s0+s -s3+s -s6+s -s9+s -s12+s -s15+s -s20+s -s30+s -s37+s -s44+s -b1000 -As -b+500 --tls-sni=www.google.com -An -Ku -a5 -s443+s -d80+s -d443+s -s80+s -An
+-Kt,h -d1 -s0+s -s3+s -s3+h -s3+n -s6+s -s9+s -s12+s -s12+h -s12+n -s15+s -s20+s -s30+s -As -b+500 --tls-sni=www.google.com -An -Ku -a5 -s443+s -d80+s -d443+s -s80+s -An
 -Kt,h -q1+s -s29+s -o5+s -f-1 -S -Asn -Ku -a5 -s443+s -d80+s -An
 -Kt,h -n www.google.com -d 1+s -O 1 -s 25+s -t 5 -An -Ku -a5 -s443+s -d80+s -d443+s -s80+s -s443+s -d53+s -s53+s -d443+s -An
 -Kt,h -Y -n www.google.com -d 1+s -O 1 -s 29+s -t 5 -An -Ku -a5 -s443+s -d80+s -d443+s -s80+s -s443+s -d53+s -s53+s -d443+s -An
