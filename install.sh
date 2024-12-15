@@ -61,7 +61,6 @@ detect_package_manager() {
         echo "zypper"
     else
         log red "Не удалось определить пакетный менеджер"
-        exit 1
     fi
 }
 
