@@ -122,7 +122,7 @@ fetch_configuration_lists() {
 
     cd "$TEMP_DIR/Byedpi-Setup-main/assets" || exit 1
 
-    pip install requests
+    pip install requests --break-system-packages
     python3 link_get.py
 
     # Отладка содержимого файлов
