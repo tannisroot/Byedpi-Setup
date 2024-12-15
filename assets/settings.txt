@@ -1,17 +1,15 @@
--q1+s -s29+s -o5+s -f-1 -S -As 
 -Kt,h -q1+s -s29+s -o5+s -f-1 -S -As -Ku -a1 -An
--Kt,h -n www.google.com -d 1+s -O 1 -s 25+s -t 5 -An -Ku -a5 -s443+s -d80+s -d443+s -s80+s -s443+s -d53+s -s53+s -d443+s
--Kt,h -n www.google.com -d 1+s -O 1 -s 29+s -t 5 -An -Ku -a5 -s443+s -d80+s -d443+s -s80+s -s443+s -d53+s -s53+s -d443+s
+-Kt,h -n www.google.com -d 1+s -O 1 -s 25+s -t 5 -An -Ku -a5 -s443+s -d80+s -d443+s -s80+s -s443+s -d53+s -s53+s -d443+s -An
+-Kt,h -n www.google.com -d 1+s -O 1 -s 29+s -t 5 -An -Ku -a5 -s443+s -d80+s -d443+s -s80+s -s443+s -d53+s -s53+s -d443+s -An
 -s1 -q1 -Y -Ar -s5 -o1+s -At -f-1 -r1+s -As -s1 -o1+s -s-1 -An
 -s1 -q1 -Y -At -T5 -b1000 -S -f-1 -r1+s -As
---split 2 --disorder 3+sni --fake -1 --ttl 5
--s0 -o1 -d1 -r1+s -Ar -o1 -At -f-1 -r1+s -As
+-Kt,h -s0 -o1 -d1 -r1+s -Ar -o1 -At -f-1 -r1+s -As -b+500 --tls-sni=www.google.com --ttl 3 -An -Ku -a5 -s443+s -d80+s -d443+s -s80+s -s443+s -o 2 -An
 -Ku -a1 -An -s1:3:1 -q22 -r+hm -Ats --tls-sni www.google.com -T5 -d1:3:1+h -f-1 -r1+sm -Ast -o1 -o25+s -r1+s -f-2 -r0+hm --tls-sni www.google.com -An -s1:3:1 -q2 -r+hm -As -f-1 -s:1:2:3 -x1
 -Kt,h -d1 -s0+s -d3+s -s6+s -d9+s -s12+s -d15+s -s20+s -d25+s -s30+s -d35+s -An -Ku -a5 -s443+s -d80+s -d443+s -s80+s -s443+s -o 2 -An
--Kt,h -d1 -s0+s -d3+s -s6+s -d9+s -s12+s -d15+s -s20+s -d25+s -s30+s -d35+s -An -Ku -a1 -An -s1 -q1 -Y -Ar -s5 -o1+s -At -f-1 -r1+s -As -s1 -o1+s -s-1 -An -b+5000 -o 2 --auto=t,r,a,s -d 2 -s1 -q1 -Y -Ar -s5 -o25000+s -At -f-1 -r1+s -As -s1 -o1+s -s-1 -An -n 0.0.0.0 -q 2+s -O 1 -s 29+s -t 5 -b+25000 -c 50
--s1 -f-1 -S -b661 -As
+-Kt,h -s1 -f-1 -S -b661 -An -Ku -a5 -s443+s -d80+s -d443+s -s80+s -An
+-Kt,h -d1 -s0+s -s3+s -s6+s -s9+s -s12+s -s15+s -s20+s -s30+s -An -Ku -a5 -s443+s -d80+s -d443+s -s80+s -An
 -Kt,h -d1 -s4 -d8 -s1+s -d5+s -s10+s -d20+s -An -Ku -a1 -An
--Kt,h -d7 -s2 -An -Ku -a1 -An -Ku -a1 -An
+-Kt,h -d7 -s2 -An -Ku -a1 -An
 -Kt,h -s1 -q1 -Ar -s5 -o1+s -At -f-1 -r1+s -As -s1 -o1+s -s-1 -An -Ku -a1 -An
 -Kt,h -q1 -r25+s -An -Ku -a1 -An
 -Kt,h -s1 -d3+s -Mh,d -At -r1+s -r3+s -An -Ku -a1 -An
