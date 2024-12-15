@@ -301,7 +301,7 @@ EOF
         local temp_dir=$(mktemp -d)
         local -a pids=()
         local -A domain_status=()  # Хэш для хранения статусов проверок
-        sleep 1
+        sleep 3
         log green "Начинаем параллельную проверку доменов..."
         
         # Запускаем проверку каждого домена в фоновом режиме
