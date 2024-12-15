@@ -23,4 +23,4 @@
 -Kt,h -s0 -o1 -Ar -o1 -At -f-1 --md5sig -r1+s -As,n -Ku -a5 -s443+s -d80+s -d443+s -s80+s -An
 -Kt,h -s0 -o1 -d1 -r1+s -Ar -o1 -At -f-1 --md5sig -r1+s -As,n -Ku -a5 -s443+s -d80+s -d443+s -s80+s -An
 -Kt,h -q1+s -s29+s -s30+s -s14+s -o5+s -f-1 --md5sig -Asn -Ku -a5 -s443+s -d80+s -An
-Kt,h -d1 -q1+s -s0+s -s3+s -s6+s -s9+s -s12+s -s15+s -s20+s -s30+s -o5+s -f-1 --md5sig -An -Ku -a5 -s443+s -d80+s -d443+s -s80+s -An
+-Kt,h -d1 -q1+s -s0+s -s3+s -s6+s -s9+s -s12+s -s15+s -s20+s -s30+s -o5+s -f-1 --md5sig -An -Ku -a5 -s443+s -d80+s -d443+s -s80+s -An
