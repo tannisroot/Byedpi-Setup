@@ -51,7 +51,7 @@ check_root() {
 
 # Проверка зависимостей
 check_dependencies() {
-    local dependencies=("curl" "unzip" "make" "gcc" "python3" "pip" "systemctl")
+    local dependencies=("curl" "unzip" "make" "gcc" "systemctl")
     local missing_deps=()
 
     for dep in "${dependencies[@]}"; do
@@ -122,8 +122,7 @@ fetch_configuration_lists() {
 
     cd "$TEMP_DIR/Byedpi-Setup-main/assets" || exit 1
 
-    pip install requests
-    python3 link_get.py
+    bash link_get.sh
 
     # Отладка содержимого файлов
     log yellow "Проверка файла settings.txt:"
