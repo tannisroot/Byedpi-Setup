@@ -49,6 +49,22 @@ check_root() {
     fi
 }
 
+# Определение пакетного менеджера
+detect_package_manager() {
+    if command -v apt-get &> /dev/null; then
+        echo "apt-get"
+    elif command -v yum &> /dev/null; then
+        echo "yum"
+    elif command -v dnf &> /dev/null; then
+        echo "dnf"
+    elif command -v zypper &> /dev/null; then
+        echo "zypper"
+    else
+        log red "Не удалось определить пакетный менеджер"
+        exit 1
+    fi
+}
+
 # Проверка зависимостей
 check_dependencies() {
     local dependencies=("curl" "unzip" "make" "gcc" "systemctl")
@@ -63,11 +79,24 @@ check_dependencies() {
     if [[ ${#missing_deps[@]} -gt 0 ]]; then
         log red "Отсутствуют необходимые зависимости: ${missing_deps[*]}"
         log yellow "Попытка автоматической установки..."
-        apt-get update
-        apt-get install -y "${missing_deps[@]}"
+        local package_manager=$(detect_package_manager)
+        case $package_manager in
+            apt-get)
+                apt-get update
+                apt-get install -y "${missing_deps[@]}"
+                ;;
+            yum)
+                yum install -y "${missing_deps[@]}"
+                ;;
+            dnf)
+                dnf install -y "${missing_deps[@]}"
+                ;;
+            zypper)
+                zypper install -y "${missing_deps[@]}"
+                ;;
+        esac
     fi
 }
-
 # Функция безопасной загрузки с кэшированием
 safe_download() {
     local url=$1
