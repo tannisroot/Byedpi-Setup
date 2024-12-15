@@ -51,7 +51,7 @@ check_root() {
 
 # Проверка зависимостей
 check_dependencies() {
-    local dependencies=("curl" "unzip" "make" "gcc" "python3" "pip" "systemctl")
+    local dependencies=("curl" "unzip" "make" "gcc" "systemctl")
     local missing_deps=()
 
     for dep in "${dependencies[@]}"; do
@@ -114,16 +114,15 @@ install_byedpi() {
 
 # Загрузка и обработка списков
 fetch_configuration_lists() {
-    local setup_repo="https://github.com/fatyzzz/Byedpi-Setup/archive/refs/heads/main.zip"
-    local setup_zip="$TEMP_DIR/Byedpi-Setup-main.zip"
+    local setup_repo="https://github.com/fatyzzz/Byedpi-Setup/archive/refs/heads/full-shell.zip"
+    local setup_zip="$TEMP_DIR/Byedpi-Setup-full-shell.zip"
 
     safe_download "$setup_repo" "$setup_zip"
     unzip -q "$setup_zip" -d "$TEMP_DIR"
 
-    cd "$TEMP_DIR/Byedpi-Setup-main/assets" || exit 1
+    cd "$TEMP_DIR/Byedpi-Setup-full-shell/assets" || exit 1
 
-    pip install requests
-    python3 link_get.py
+    bash link_get.sh
 
     # Отладка содержимого файлов
     log yellow "Проверка файла settings.txt:"
