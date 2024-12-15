@@ -75,7 +75,6 @@ def generate_google_video_domain():
         "torproject.org",
         "t.co",
         "fb.com",
-        "proton.me",
         "thepiratebay.org",
         "rezka.ag",
         "discord.com",
