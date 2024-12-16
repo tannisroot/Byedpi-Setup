@@ -65,7 +65,7 @@ detect_distro() {
 install_arch() {
     log green "Обнаружен Arch Linux. Устанавливаю пакеты..."
     log yellow "Требуются права суперпользователя. Введите пароль root:"
-    su -c "pacman -Syu --noconfirm curl make gcc unzip"
+    su -c "pacman -S --noconfirm curl make gcc unzip"
 }
 
 # Установка пакетов для Debian
