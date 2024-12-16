@@ -64,6 +64,7 @@ install_debian() {
     local package_name="sudo"
     if dpkg -l | grep -qw "$package_name"; then
         log yellow "Пакет '$package_name' уже установлен."
+        su
         sudo apt update
         sudo apt install -y curl make gcc unzip
         return 0
@@ -107,22 +108,35 @@ install_other() {
 # Проверка и установка зависимостей
 check_dependencies() {
     detect_distro
-    case "$DISTRO" in
-        arch)
-            install_arch
-            ;;
-        debian)
-            install_debian
-            ;;
-        ubuntu)
-            install_ubuntu
-            ;;
-        *)
-            install_other
-            ;;
-    esac
 
-    log green "Установка завершена! Все необходимые пакеты установлены."
+    local dependencies=("gcc" "make" "unzip" "curl")
+    local missing=()
+
+    for dep in "${dependencies[@]}"; do
+        if ! command -v "$dep" &> /dev/null; then
+            missing+=("$dep")
+        fi
+    done
+
+    if [ ${#missing[@]} -ne 0 ]; then
+        log yellow "Не найдены необходимые зависимости: ${missing[*]}"
+        case "$DISTRO" in
+            arch)
+                install_arch
+                ;;
+            debian)
+                install_debian
+                ;;
+            ubuntu)
+                install_ubuntu
+                ;;
+            *)
+                install_other
+                ;;
+        esac
+    else
+        log green "Все необходимые пакеты установлены."
+    fi
 }
 
 # Функция безопасной загрузки с кэшированием
