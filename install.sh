@@ -41,7 +41,16 @@ safe_mkdir() {
     mkdir -p "$dir_path"
     log green "Создана директория: $dir_path"
 }
-
+safe_mkdir_no_rm() {
+    local dir_path=$1
+    
+    if [[ -d "$dir_path" ]]; then
+        log yellow "Директория $dir_path уже существует."
+    fi
+    
+    mkdir -p "$dir_path"
+    log green "Создана директория: $dir_path"
+}
 detect_distro() {
     if [[ -f /etc/os-release ]]; then
         . /etc/os-release
@@ -284,7 +293,7 @@ test_configurations() {
 
     local -a results=()
     local max_parallel=${#links[@]}  # Увеличиваем количество параллельных проверок
-    safe_mkdir "$HOME/.config/systemd/user/"
+    safe_mkdir_no_rm "$HOME/.config/systemd/user/"
     # Перебираем настройки
     local setting_number=1
     for setting in "${settings[@]}"; do
