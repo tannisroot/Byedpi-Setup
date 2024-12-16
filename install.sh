@@ -274,7 +274,6 @@ WorkingDirectory=$BYEDPI_DIR/
 ExecStart=$BYEDPI_DIR/ciadpi-core --ip 127.0.0.1 --port $port $setting
 Restart=on-failure
 RestartSec=5s
-IgnoreOnIsolate=true
 
 [Install]
 WantedBy=multi-user.target
@@ -330,7 +329,6 @@ WorkingDirectory=$BYEDPI_DIR
 ExecStart=$BYEDPI_DIR/ciadpi-core --ip 127.0.0.1 --port $port_test $setting
 Restart=on-failure
 RestartSec=5s
-IgnoreOnIsolate=true
 
 [Install]
 WantedBy=multi-user.target
