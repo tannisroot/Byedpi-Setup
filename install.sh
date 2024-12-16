@@ -440,7 +440,7 @@ EOF
     # Добавление текста
     echo -e "\e[36m"
     echo "Byedpi-Setup"
-    echo "github.com/fatyzzz/Byedpi-Setuo"
+    echo "github.com/fatyzzz/Byedpi-Setup"
     echo -e "\e[0m"
     sleep 2
     check_dependencies
