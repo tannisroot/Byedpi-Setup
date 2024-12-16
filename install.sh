@@ -2,7 +2,7 @@
 
 # Глобальные константы
 readonly SCRIPT_NAME=$(basename "$0")
-readonly LOG_FILE="/home/${SCRIPT_NAME}.log"
+readonly LOG_FILE="/tmp/${SCRIPT_NAME}.log"
 readonly CONFIG_FILE="/etc/byedpi/config.conf"
 readonly BYEDPI_DIR="/usr/local/bin/ciadpi"
 readonly TEMP_DIR=$(mktemp -d)
