@@ -66,44 +66,25 @@ install_arch() {
 # Установка пакетов для Debian
 install_debian() {
     log green "Обнаружен Debian. Устанавливаю пакеты..."
+    log yellow "Требуются права суперпользователя. Введите пароль root:"
     
-    install_packages() {
-        apt update
-        apt install -y sudo curl make gcc unzip
-        if ! getent group sudo >/dev/null; then
-            groupadd sudo
-        fi
-        usermod -aG sudo "$SUDO_USER"
+    # Используем su для выполнения команд от root
+    su -c "apt update && apt install -y curl make gcc unzip" || {
+        log red "Ошибка установки пакетов"
+        exit 1
     }
-
-    if sudo -n true 2>/dev/null; then
-        sudo apt update
-        sudo apt install -y curl make gcc unzip
-    else
-        log yellow "Требуются права суперпользователя. Введите пароль root:"
-        # Сохраняем текущего пользователя
-        SUDO_USER=$(whoami)
-        # Используем su с флагом -c для выполнения команд
-        su -c "$(declare -f install_packages); install_packages"
-        log green "Установка завершена. Перезайдите в систему для применения изменений."
-        exit 0
-    fi
+    
+    log green "Установка завершена."
 }
 
 # Установка пакетов для Ubuntu
 install_ubuntu() {
     log green "Обнаружен Ubuntu. Устанавливаю пакеты..."
-    if sudo -n true 2>/dev/null; then
-        sudo apt update
-        sudo apt install -y curl make gcc unzip
-    else
-        log yellow "Требуются права суперпользователя. Введите пароль root:"
-        su -c "apt update && apt install -y sudo curl make gcc unzip"
-        SUDO_USER=$(whoami)
-        su -c "usermod -aG sudo $SUDO_USER"
-        log green "Установка завершена. Перезайдите в систему для применения изменений."
-        exit 0
-    fi
+    su -c "apt update && apt install -y curl make gcc unzip" || {
+        log red "Ошибка установки пакетов"
+        exit 1
+    }
+    log green "Установка завершена."
 }
 
 # Универсальная установка для других дистрибутивов
