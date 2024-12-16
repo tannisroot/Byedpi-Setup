@@ -4,7 +4,7 @@
 readonly SCRIPT_NAME=$(basename "$0")
 readonly LOG_FILE="/tmp/${SCRIPT_NAME}.log"
 readonly CONFIG_FILE="$HOME/.config/systemd/user/config.conf"
-readonly BYEDPI_DIR="/usr/local/bin/ciadpi"
+readonly BYEDPI_DIR="/usr/local/bin/"
 readonly TEMP_DIR=$(mktemp -d)
 readonly setup_repo="https://github.com/fatyzzz/Byedpi-Setup/archive/refs/heads/main.zip"
 
@@ -188,7 +188,6 @@ install_byedpi() {
 
     log yellow "Компиляция ByeDPI..."
     if make; then
-        safe_mkdir "$BYEDPI_DIR"
         mv ciadpi "$BYEDPI_DIR/ciadpi-core"
         log green "ByeDPI успешно установлен в $BYEDPI_DIR"
     else
