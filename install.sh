@@ -35,6 +35,7 @@ safe_mkdir() {
     
     if [[ -d "$dir_path" ]]; then
         log yellow "Директория $dir_path уже существует. Очистка..."
+        rm -rf "$dir_path"
     fi
     
     mkdir -p "$dir_path"
