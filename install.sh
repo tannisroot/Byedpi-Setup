@@ -6,6 +6,7 @@ readonly LOG_FILE="/var/log/${SCRIPT_NAME}.log"
 readonly CONFIG_FILE="/etc/byedpi/config.conf"
 readonly BYEDPI_DIR="/usr/local/bin/ciadpi"
 readonly TEMP_DIR=$(mktemp -d)
+readonly setup_repo="https://github.com/fatyzzz/Byedpi-Setup/archive/refs/heads/main.zip"
 
 # Цвета для логирования
 readonly COLOR_GREEN='\e[32m'
@@ -169,7 +170,6 @@ install_byedpi() {
 
 # Загрузка и обработка списков
 fetch_configuration_lists() {
-    local setup_repo="https://github.com/fatyzzz/Byedpi-Setup/archive/refs/heads/main.zip"
     local setup_zip="$TEMP_DIR/Byedpi-Setup-main.zip"
 
     safe_download "$setup_repo" "$setup_zip"
@@ -226,47 +226,12 @@ update_service() {
         log red "Ошибка: не указан порт или настройки"
         return 1
     fi
-    
-    log yellow "Проверка и удаление устаревшей службы..."
-
-    # Путь к файлу службы
-    SERVICE_PATHLEGACY="/etc/systemd/system/ciadpi.service"
-
-    # Проверка существования службы
-    if [[ -f "$SERVICE_PATHLEGACY" ]]; then
-        log green "Служба найдена по пути $SERVICE_PATHLEGACY."
-
-        # Остановка службы, если она активна
-        if systemctl is-active --quiet ciadpi; then
-            log yellow "Остановка службы ciadpi..."
-            sudo systemctl stop ciadpi
-            log green "Служба остановлена."
-        else
-            log yellow "Служба не активна."
-        fi
-
-        # Отключение службы
-        log yellow "Отключение службы ciadpi..."
-        sudo systemctl disable ciadpi
-
-        # Удаление файла службы
-        log yellow "Удаление файла службы $SERVICE_PATHLEGACY..."
-        sudo rm -f "$SERVICE_PATHLEGACY"
-
-        # Перезагрузка конфигурации systemd
-        log yellow "Перезагрузка конфигурации systemd..."
-        sudo systemctl daemon-reload
-
-        log green "Служба успешно удалена."
-    else
-        log yellow "Служба по пути $SERVICE_PATHLEGACY не найдена."
-    fi
 
     # Создаем конфигурационный файл
     safe_mkdir "$(dirname "$CONFIG_FILE")"
     echo "$setting" > "$CONFIG_FILE"
     # Создаем службу systemd
-    cat > "/usr/lib/systemd/user/ciadpi.service" <<EOF
+    cat > "/etc/systemd/system/ciadpi.service" <<EOF
 [Unit]
 Description=ByeDPI Proxy Service
 After=network.target
@@ -321,7 +286,7 @@ test_configurations() {
         log green "Настройка: $setting"
 
         # Создаем службу
-        cat > "/usr/lib/systemd/user/ciadpi.service" <<EOF
+        cat > "/etc/systemd/system/ciadpi.service" <<EOF
 [Unit]
 Description=ByeDPI Proxy Service
 After=network.target
