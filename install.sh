@@ -64,16 +64,30 @@ install_debian() {
     local package_name="sudo"
     if dpkg -l | grep -qw "$package_name"; then
         log yellow "Пакет '$package_name' уже установлен."
-        su
-        sudo apt update
-        sudo apt install -y curl make gcc unzip
+        if sudo -n true 2>/dev/null; then
+            echo "Текущий пользователь имеет права sudo."
+            sudo apt update
+            sudo apt install -y curl make gcc unzip
+        else
+            echo "Текущий пользователь НЕ имеет права sudo."
+            su
+            sudo apt update
+            sudo apt install -y curl make gcc unzip
+        fi
         return 0
     else
         log yellow "Пакет '$package_name' не установлен."
-        su
-        apt update
-        apt install sudo
-        sudo apt install -y curl make gcc unzip
+        if sudo -n true 2>/dev/null; then
+            echo "Текущий пользователь имеет права sudo."
+            sudo apt update
+            sudo apt install -y curl make gcc unzip
+        else
+            echo "Текущий пользователь НЕ имеет права sudo."
+            su
+            sudo apt update
+            apt install sudo
+            sudo apt install -y curl make gcc unzip
+        fi
         return 1
     fi
 }
