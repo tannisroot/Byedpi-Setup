@@ -46,10 +46,10 @@ safe_mkdir_no_rm() {
     
     if [[ -d "$dir_path" ]]; then
         log yellow "Директория $dir_path уже существует."
+    else
+        mkdir -p "$dir_path"
+        log green "Создана директория: $dir_path"
     fi
-    
-    mkdir -p "$dir_path"
-    log green "Создана директория: $dir_path"
 }
 detect_distro() {
     if [[ -f /etc/os-release ]]; then
