@@ -55,12 +55,8 @@ detect_distro() {
 # Установка пакетов для Arch Linux
 install_arch() {
     log green "Обнаружен Arch Linux. Устанавливаю пакеты..."
-    if sudo -n true 2>/dev/null; then
-        sudo pacman -Syu --noconfirm curl make gcc unzip
-    else
-        log yellow "Требуются права суперпользователя. Введите пароль root:"
-        su -c "pacman -Syu --noconfirm curl make gcc unzip"
-    fi
+    log yellow "Требуются права суперпользователя. Введите пароль root:"
+    su -c "pacman -Syu --noconfirm curl make gcc unzip"
 }
 
 # Установка пакетов для Debian
@@ -92,23 +88,11 @@ install_other() {
     log yellow "Ваш дистрибутив ($DISTRO) не поддерживается напрямую."
     
     if command -v zypper >/dev/null 2>&1; then
-        if sudo -n true 2>/dev/null; then
-            sudo zypper install -y curl make gcc unzip
-        else
-            su -c "zypper install -y curl make gcc unzip"
-        fi
+        su -c "zypper install -y curl make gcc unzip"
     elif command -v dnf >/dev/null 2>&1; then
-        if sudo -n true 2>/dev/null; then
-            sudo dnf install -y curl make gcc unzip
-        else
-            su -c "dnf install -y curl make gcc unzip"
-        fi
+        su -c "dnf install -y curl make gcc unzip"
     elif command -v yum >/dev/null 2>&1; then
-        if sudo -n true 2>/dev/null; then
-            sudo yum install -y curl make gcc unzip
-        else
-            su -c "yum install -y curl make gcc unzip"
-        fi
+        su -c "yum install -y curl make gcc unzip"
     else
         log red "Не удалось найти менеджер пакетов. Установите вручную: curl, make, gcc, unzip."
         exit 1
