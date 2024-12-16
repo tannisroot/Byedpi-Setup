@@ -68,7 +68,7 @@ install_debian() {
         sudo apt install -y curl make gcc unzip
         return 0
     else
-        yellow "Пакет '$package_name' не установлен."
+        log yellow "Пакет '$package_name' не установлен."
         apt update
         apt install sudo
         sudo apt install -y curl make gcc unzip
