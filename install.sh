@@ -304,7 +304,7 @@ test_configurations() {
 
     local -a results=()
     local max_parallel=${#links[@]}  # Увеличиваем количество параллельных проверок
-
+    safe_mkdir "$HOME/.config/systemd/user/"
     # Перебираем настройки
     local setting_number=1
     for setting in "${settings[@]}"; do
@@ -313,7 +313,6 @@ test_configurations() {
         log yellow "================================================"
         log yellow "Тестирование настройки [$setting_number/${#settings[@]}]"
         log green "Настройка: $setting"
-        safe_mkdir "$HOME/.config/systemd/user/ciadpi.service"
         # Создаем службу
         cat > "$HOME/.config/systemd/user/ciadpi.service" <<EOF
 [Unit]
