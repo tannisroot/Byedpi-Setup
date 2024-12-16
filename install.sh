@@ -63,29 +63,29 @@ detect_distro() {
 
 # Установка пакетов для Arch Linux
 install_arch() {
-    log green "Обнаружен Arch Linux. Устанавливаю пакеты..."
+    local packages=("$@")
+    log green "Обнаружен Arch Linux. Устанавливаю пакеты: ${packages[*]}"
     log yellow "Требуются права суперпользователя. Введите пароль root:"
-    su -c "pacman -S --noconfirm curl make gcc unzip"
+    su -c "pacman -S --noconfirm ${packages[*]}"
 }
 
 # Установка пакетов для Debian
 install_debian() {
-    log green "Обнаружен Debian. Устанавливаю пакеты..."
+    local packages=("$@")
+    log green "Обнаружен Debian. Устанавливаю пакеты: ${packages[*]}"
     log yellow "Требуются права суперпользователя. Введите пароль root:"
-    
-    # Используем su для выполнения команд от root
-    su -c "apt update && apt install -y curl make gcc unzip" || {
+    su -c "apt update && apt install -y ${packages[*]}" || {
         log red "Ошибка установки пакетов"
         exit 1
     }
-    
     log green "Установка завершена."
 }
 
 # Установка пакетов для Ubuntu
 install_ubuntu() {
-    log green "Обнаружен Ubuntu. Устанавливаю пакеты..."
-    su -c "apt update && apt install -y curl make gcc unzip" || {
+    local packages=("$@")
+    log green "Обнаружен Ubuntu. Устанавливаю пакеты: ${packages[*]}"
+    su -c "apt update && apt install -y ${packages[*]}" || {
         log red "Ошибка установки пакетов"
         exit 1
     }
@@ -94,16 +94,17 @@ install_ubuntu() {
 
 # Универсальная установка для других дистрибутивов
 install_other() {
+    local packages=("$@")
     log yellow "Ваш дистрибутив ($DISTRO) не поддерживается напрямую."
     
     if command -v zypper >/dev/null 2>&1; then
-        su -c "zypper install -y curl make gcc unzip"
+        su -c "zypper install -y ${packages[*]}"
     elif command -v dnf >/dev/null 2>&1; then
-        su -c "dnf install -y curl make gcc unzip"
+        su -c "dnf install -y ${packages[*]}"
     elif command -v yum >/dev/null 2>&1; then
-        su -c "yum install -y curl make gcc unzip"
+        su -c "yum install -y ${packages[*]}"
     else
-        log red "Не удалось найти менеджер пакетов. Установите вручную: curl, make, gcc, unzip."
+        log red "Не удалось найти менеджер пакетов. Установите вручную: ${packages[*]}"
         exit 1
     fi
 }
@@ -125,16 +126,16 @@ check_dependencies() {
         log yellow "Не найдены необходимые зависимости: ${missing[*]}"
         case "$DISTRO" in
             arch)
-                install_arch
+                install_arch "${missing[@]}"
                 ;;
             debian)
-                install_debian
+                install_debian "${missing[@]}"
                 ;;
             ubuntu)
-                install_ubuntu
+                install_ubuntu "${missing[@]}"
                 ;;
             *)
-                install_other
+                install_other "${missing[@]}"
                 ;;
         esac
     else
