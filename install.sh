@@ -35,7 +35,6 @@ safe_mkdir() {
     
     if [[ -d "$dir_path" ]]; then
         log yellow "Директория $dir_path уже существует. Очистка..."
-        rm -rf "$dir_path"
     fi
     
     mkdir -p "$dir_path"
@@ -261,7 +260,7 @@ update_service() {
     fi
 
     # Создаем конфигурационный файл
-    safe_mkdir "$(dirname "$CONFIG_FILE")"
+    safe_mkdir_no_rm "$(dirname "$CONFIG_FILE")"
     echo "$setting" > "$CONFIG_FILE"
     # Создаем службу systemd
     cat > "$HOME/.config/systemd/user/ciadpi.service" <<EOF
