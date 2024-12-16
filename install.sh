@@ -55,64 +55,79 @@ detect_distro() {
 # Установка пакетов для Arch Linux
 install_arch() {
     log green "Обнаружен Arch Linux. Устанавливаю пакеты..."
-    sudo pacman -Syu --noconfirm curl make gcc unzip
+    if sudo -n true 2>/dev/null; then
+        sudo pacman -Syu --noconfirm curl make gcc unzip
+    else
+        log yellow "Требуются права суперпользователя. Введите пароль root:"
+        su -c "pacman -Syu --noconfirm curl make gcc unzip"
+    fi
 }
 
 # Установка пакетов для Debian
 install_debian() {
     log green "Обнаружен Debian. Устанавливаю пакеты..."
-    local package_name="sudo"
-    if dpkg -l | grep -qw "$package_name"; then
-        log yellow "Пакет '$package_name' уже установлен."
-        if sudo -n true 2>/dev/null; then
-            echo "Текущий пользователь имеет права sudo."
-            sudo apt update
-            sudo apt install -y curl make gcc unzip
-        else
-            echo "Текущий пользователь НЕ имеет права sudo."
-            su
-            sudo apt update
-            sudo apt install -y curl make gcc unzip
+    
+    install_packages() {
+        apt update
+        apt install -y sudo curl make gcc unzip
+        if ! getent group sudo >/dev/null; then
+            groupadd sudo
         fi
-        return 0
+        usermod -aG sudo "$SUDO_USER"
+    }
+
+    if sudo -n true 2>/dev/null; then
+        sudo apt update
+        sudo apt install -y curl make gcc unzip
     else
-        log yellow "Пакет '$package_name' не установлен."
-        if sudo -n true 2>/dev/null; then
-            echo "Текущий пользователь имеет права sudo."
-            sudo apt update
-            sudo apt install -y curl make gcc unzip
-        else
-            echo "Текущий пользователь НЕ имеет права sudo."
-            su
-            sudo apt update
-            apt install sudo
-            sudo apt install -y curl make gcc unzip
-        fi
-        return 1
+        log yellow "Требуются права суперпользователя. Введите пароль root:"
+        # Сохраняем текущего пользователя
+        SUDO_USER=$(whoami)
+        # Используем su с флагом -c для выполнения команд
+        su -c "$(declare -f install_packages); install_packages"
+        log green "Установка завершена. Перезайдите в систему для применения изменений."
+        exit 0
     fi
 }
 
 # Установка пакетов для Ubuntu
 install_ubuntu() {
     log green "Обнаружен Ubuntu. Устанавливаю пакеты..."
-    sudo apt update
-    sudo apt install -y curl make gcc unzip
+    if sudo -n true 2>/dev/null; then
+        sudo apt update
+        sudo apt install -y curl make gcc unzip
+    else
+        log yellow "Требуются права суперпользователя. Введите пароль root:"
+        su -c "apt update && apt install -y sudo curl make gcc unzip"
+        SUDO_USER=$(whoami)
+        su -c "usermod -aG sudo $SUDO_USER"
+        log green "Установка завершена. Перезайдите в систему для применения изменений."
+        exit 0
+    fi
 }
 
 # Универсальная установка для других дистрибутивов
 install_other() {
-    log yellow "Ваш дистрибутив ($DISTRO) не поддерживается напрямую. Попробую общие методы установки."
-    log yellow "Пожалуйста, установите пакеты вручную, если что-то пойдет не так."
+    log yellow "Ваш дистрибутив ($DISTRO) не поддерживается напрямую."
     
     if command -v zypper >/dev/null 2>&1; then
-        log green "Похоже, у вас SUSE. Устанавливаю через zypper..."
-        sudo zypper install -y curl make gcc unzip
+        if sudo -n true 2>/dev/null; then
+            sudo zypper install -y curl make gcc unzip
+        else
+            su -c "zypper install -y curl make gcc unzip"
+        fi
     elif command -v dnf >/dev/null 2>&1; then
-        log green "Похоже, у вас Fedora или RHEL. Устанавливаю через dnf..."
-        sudo dnf install -y curl make gcc unzip
+        if sudo -n true 2>/dev/null; then
+            sudo dnf install -y curl make gcc unzip
+        else
+            su -c "dnf install -y curl make gcc unzip"
+        fi
     elif command -v yum >/dev/null 2>&1; then
-        log green "Похоже, у вас старый RHEL/CentOS. Устанавливаю через yum..."
-        sudo yum install -y curl make gcc unzip
+        if sudo -n true 2>/dev/null; then
+            sudo yum install -y curl make gcc unzip
+        else
+            su -c "yum install -y curl make gcc unzip"
+        fi
     else
         log red "Не удалось найти менеджер пакетов. Установите вручную: curl, make, gcc, unzip."
         exit 1
