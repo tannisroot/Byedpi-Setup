@@ -3,7 +3,7 @@
 # Глобальные константы
 readonly SCRIPT_NAME=$(basename "$0")
 readonly LOG_FILE="/tmp/${SCRIPT_NAME}.log"
-readonly CONFIG_FILE="/etc/byedpi/config.conf"
+readonly CONFIG_FILE="$HOME/.config/systemd/user/config.conf"
 readonly BYEDPI_DIR="/usr/local/bin/ciadpi"
 readonly TEMP_DIR=$(mktemp -d)
 readonly setup_repo="https://github.com/fatyzzz/Byedpi-Setup/archive/refs/heads/main.zip"
@@ -313,7 +313,7 @@ test_configurations() {
         log yellow "================================================"
         log yellow "Тестирование настройки [$setting_number/${#settings[@]}]"
         log green "Настройка: $setting"
-
+        safe_mkdir "$HOME/.config/systemd/user/ciadpi.service"
         # Создаем службу
         cat > "$HOME/.config/systemd/user/ciadpi.service" <<EOF
 [Unit]
