@@ -188,6 +188,7 @@ install_byedpi() {
 
     log yellow "Компиляция ByeDPI..."
     if make; then
+        safe_mkdir "$BYEDPI_DIR"
         mv ciadpi "$BYEDPI_DIR/ciadpi-core"
         log green "ByeDPI успешно установлен в $BYEDPI_DIR"
     else
