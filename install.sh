@@ -260,7 +260,7 @@ update_service() {
     safe_mkdir "$(dirname "$CONFIG_FILE")"
     echo "$setting" > "$CONFIG_FILE"
     # Создаем службу systemd
-    cat > "/etc/systemd/system/ciadpi.service" <<EOF
+    cat > "$HOME/.config/systemd/user/ciadpi.service" <<EOF
 [Unit]
 Description=ByeDPI Proxy Service
 After=network.target
@@ -276,10 +276,10 @@ WantedBy=multi-user.target
 EOF
 
     # Перезагружаем конфигурацию systemd
-    systemctl daemon-reload
+    systemctl --user daemon-reload
 
     # Перезапускаем службу
-    systemctl restart ciadpi || {
+    systemctl --user restart ciadpi || {
         log red "Ошибка запуска службы"
         return 1
     }
@@ -300,7 +300,7 @@ test_configurations() {
     log yellow "Загружено доменов: ${#links[@]}"
 
     # Останавливаем службу
-    systemctl stop ciadpi 2>/dev/null || true
+    systemctl --user stop ciadpi 2>/dev/null || true
 
     local -a results=()
     local max_parallel=${#links[@]}  # Увеличиваем количество параллельных проверок
@@ -315,7 +315,7 @@ test_configurations() {
         log green "Настройка: $setting"
 
         # Создаем службу
-        cat > "/etc/systemd/system/ciadpi.service" <<EOF
+        cat > "$HOME/.config/systemd/user/ciadpi.service" <<EOF
 [Unit]
 Description=ByeDPI Proxy Service
 After=network.target
@@ -330,7 +330,7 @@ RestartSec=5s
 WantedBy=multi-user.target
 EOF
         log green "Запускаем службу..."
-        { systemctl daemon-reload && systemctl restart ciadpi; } || {
+        { systemctl --user daemon-reload && systemctl --user restart ciadpi; } || {
             log red "Ошибка запуска службы для настройки $setting, пропускаем..."
             continue
         }
@@ -338,14 +338,14 @@ EOF
 
         log yellow "Ожидание запуска службы..."
         for i in {1..10}; do
-            if systemctl is-active --quiet ciadpi; then
+            if systemctl --user is-active --quiet ciadpi; then
             log green "Служба успешно запущена"
             break
             fi
             sleep 1
         done
 
-        if ! systemctl is-active --quiet ciadpi; then
+        if ! systemctl --user is-active --quiet ciadpi; then
             log red "Служба не запустилась для настройки $setting, пропускаем..."
             continue
         fi
@@ -408,7 +408,7 @@ EOF
         rm -rf "$temp_dir"
 
         log yellow "Останавливаем службу..."
-        systemctl stop ciadpi 2>/dev/null || true
+        systemctl --user stop ciadpi 2>/dev/null || true
 
         local success_rate=0
         if [[ $total_count -gt 0 ]]; then
@@ -434,7 +434,7 @@ EOF
 main() {
     check_dependencies
     
-    trap 'log red "Скрипт прерван"; systemctl stop ciadpi 2>/dev/null || true; exit 1' SIGINT SIGTERM ERR
+    trap 'log red "Скрипт прерван"; systemctl --user stop ciadpi 2>/dev/null || true; exit 1' SIGINT SIGTERM ERR
 
     log green "Начало установки ByeDPI"
     safe_mkdir "$TEMP_DIR"
