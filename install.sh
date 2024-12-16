@@ -157,7 +157,7 @@ check_dependencies() {
 safe_download() {
     local url=$1
     local output=$2
-    local cache_dir="/var/cache/byedpi"
+    local cache_dir="/tmp/cache/byedpi"
 
     safe_mkdir "$cache_dir"
 
