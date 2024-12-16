@@ -4,7 +4,7 @@
 readonly SCRIPT_NAME=$(basename "$0")
 readonly LOG_FILE="/var/log/${SCRIPT_NAME}.log"
 readonly CONFIG_FILE="/etc/byedpi/config.conf"
-readonly BYEDPI_DIR="/opt/ciadpi"
+readonly BYEDPI_DIR="/usr/local/bin/ciadpi"
 readonly TEMP_DIR=$(mktemp -d)
 
 # Цвета для логирования
@@ -41,61 +41,88 @@ safe_mkdir() {
     log green "Создана директория: $dir_path"
 }
 
-# Проверка прав суперпользователя
-check_root() {
-    if [[ $EUID -ne 0 ]]; then
-       log red "Этот скрипт должен запускаться с правами root" 
-       exit 1
-    fi
-}
-
-# Определение пакетного менеджера
-detect_package_manager() {
-    if command -v apt-get &> /dev/null; then
-        echo "apt-get"
-    elif command -v yum &> /dev/null; then
-        echo "yum"
-    elif command -v dnf &> /dev/null; then
-        echo "dnf"
-    elif command -v zypper &> /dev/null; then
-        echo "zypper"
+detect_distro() {
+    if [[ -f /etc/os-release ]]; then
+        . /etc/os-release
+        DISTRO=$ID
     else
-        log red "Не удалось определить пакетный менеджер"
+        log red "Не могу определить дистрибутив. Проверьте файл /etc/os-release."
+        exit 1
     fi
 }
 
-# Проверка зависимостей
+# Установка пакетов для Arch Linux
+install_arch() {
+    log green "Обнаружен Arch Linux. Устанавливаю пакеты..."
+    sudo pacman -Syu --noconfirm curl make gcc unzip
+}
+
+# Установка пакетов для Debian
+install_debian() {
+    log green "Обнаружен Debian. Устанавливаю пакеты..."
+    local package_name="sudo"
+    if dpkg -l | grep -qw "$package_name"; then
+        log yellow "Пакет '$package_name' уже установлен."
+        sudo apt update
+        sudo apt install -y curl make gcc unzip
+        return 0
+    else
+        yellow "Пакет '$package_name' не установлен."
+        apt update
+        apt install sudo
+        sudo apt install -y curl make gcc unzip
+        return 1
+    fi
+}
+
+# Установка пакетов для Ubuntu
+install_ubuntu() {
+    log green "Обнаружен Ubuntu. Устанавливаю пакеты..."
+    sudo apt update
+    sudo apt install -y curl make gcc unzip
+}
+
+# Универсальная установка для других дистрибутивов
+install_other() {
+    log yellow "Ваш дистрибутив ($DISTRO) не поддерживается напрямую. Попробую общие методы установки."
+    log yellow "Пожалуйста, установите пакеты вручную, если что-то пойдет не так."
+    
+    if command -v zypper >/dev/null 2>&1; then
+        log green "Похоже, у вас SUSE. Устанавливаю через zypper..."
+        sudo zypper install -y curl make gcc unzip
+    elif command -v dnf >/dev/null 2>&1; then
+        log green "Похоже, у вас Fedora или RHEL. Устанавливаю через dnf..."
+        sudo dnf install -y curl make gcc unzip
+    elif command -v yum >/dev/null 2>&1; then
+        log green "Похоже, у вас старый RHEL/CentOS. Устанавливаю через yum..."
+        sudo yum install -y curl make gcc unzip
+    else
+        log red "Не удалось найти менеджер пакетов. Установите вручную: curl, make, gcc, unzip."
+        exit 1
+    fi
+}
+
+# Проверка и установка зависимостей
 check_dependencies() {
-    local dependencies=("curl" "unzip" "make" "gcc" "systemctl")
-    local missing_deps=()
+    detect_distro
+    case "$DISTRO" in
+        arch)
+            install_arch
+            ;;
+        debian)
+            install_debian
+            ;;
+        ubuntu)
+            install_ubuntu
+            ;;
+        *)
+            install_other
+            ;;
+    esac
 
-    for dep in "${dependencies[@]}"; do
-        if ! command -v "$dep" &> /dev/null; then
-            missing_deps+=("$dep")
-        fi
-    done
-
-    if [[ ${#missing_deps[@]} -gt 0 ]]; then
-        log red "Отсутствуют необходимые зависимости: ${missing_deps[*]}"
-        log yellow "Попытка автоматической установки..."
-        local package_manager=$(detect_package_manager)
-        case $package_manager in
-            apt-get)
-                apt-get update
-                apt-get install -y "${missing_deps[@]}"
-                ;;
-            yum)
-                yum install -y "${missing_deps[@]}"
-                ;;
-            dnf)
-                dnf install -y "${missing_deps[@]}"
-                ;;
-            zypper)
-                zypper install -y "${missing_deps[@]}"
-                ;;
-        esac
-    fi
+    log green "Установка завершена! Все необходимые пакеты установлены."
 }
+
 # Функция безопасной загрузки с кэшированием
 safe_download() {
     local url=$1
@@ -199,13 +226,47 @@ update_service() {
         log red "Ошибка: не указан порт или настройки"
         return 1
     fi
+    
+    log yellow "Проверка и удаление устаревшей службы..."
+
+    # Путь к файлу службы
+    SERVICE_PATHLEGACY="/etc/systemd/system/ciadpi.service"
+
+    # Проверка существования службы
+    if [[ -f "$SERVICE_PATHLEGACY" ]]; then
+        log green "Служба найдена по пути $SERVICE_PATHLEGACY."
+
+        # Остановка службы, если она активна
+        if systemctl is-active --quiet ciadpi; then
+            log yellow "Остановка службы ciadpi..."
+            sudo systemctl stop ciadpi
+            log green "Служба остановлена."
+        else
+            log yellow "Служба не активна."
+        fi
+
+        # Отключение службы
+        log yellow "Отключение службы ciadpi..."
+        sudo systemctl disable ciadpi
+
+        # Удаление файла службы
+        log yellow "Удаление файла службы $SERVICE_PATHLEGACY..."
+        sudo rm -f "$SERVICE_PATHLEGACY"
+
+        # Перезагрузка конфигурации systemd
+        log yellow "Перезагрузка конфигурации systemd..."
+        sudo systemctl daemon-reload
+
+        log green "Служба успешно удалена."
+    else
+        log yellow "Служба по пути $SERVICE_PATHLEGACY не найдена."
+    fi
 
     # Создаем конфигурационный файл
     safe_mkdir "$(dirname "$CONFIG_FILE")"
     echo "$setting" > "$CONFIG_FILE"
-
     # Создаем службу systemd
-    cat > "/etc/systemd/system/ciadpi.service" <<EOF
+    cat > "/usr/lib/systemd/user/ciadpi.service" <<EOF
 [Unit]
 Description=ByeDPI Proxy Service
 After=network.target
@@ -260,7 +321,7 @@ test_configurations() {
         log green "Настройка: $setting"
 
         # Создаем службу
-        cat > "/etc/systemd/system/ciadpi.service" <<EOF
+        cat > "/usr/lib/systemd/user/ciadpi.service" <<EOF
 [Unit]
 Description=ByeDPI Proxy Service
 After=network.target
@@ -377,7 +438,6 @@ EOF
 
 # Основная функция
 main() {
-    check_root
     check_dependencies
     
     trap 'log red "Скрипт прерван"; systemctl stop ciadpi 2>/dev/null || true; exit 1' SIGINT SIGTERM ERR
