@@ -273,8 +273,8 @@ EOF
         log red "Ошибка запуска службы"
         return 1
     }
-    systemctl --user enable ciadpi
-    log green "Служба добавлена в автозапсук"
+    systemctl --user enable ciadpi 2>/dev/null 
+    log green "Служба добавлена в автозапуск"
     return 0
 }
 
