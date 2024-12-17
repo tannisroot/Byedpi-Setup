@@ -612,12 +612,12 @@ EOF
 
         IFS='#' read -r selected_setting _ _ _ _ <<< "${filtered_results[selected_index]}"    
         update_service "$port" "$selected_setting"
-        log green "Установка ByeDPI завершена. Служба запущена с настройкой: $selected_setting"
+        log green "Установка ByeDPI завершена. Служба ciadpi запущена от пользователя с настройкой: $selected_setting "
         log yellow "Информация для подключения Socks5 прокси"
         log yellow "Айпи: 127.0.0.1"
         log yellow "Порт: $port"
     else
-        log green t.me/fatyzzz
+        log green "t.me/fatyzzz"
     fi
 
     # Очистка временных файлов
