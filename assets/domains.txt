@@ -24,14 +24,7 @@ rr2---sn-hgn7ynek.googlevideo.com
 googleapis.com
 gstatic.com
 play.google.com
-rutor.info
-rutracker.org
-facebook.com
-torproject.org
-t.co
-fb.com
-thepiratebay.org
-rezka.ag
+meduza.io
 discord.com
 finland10100.discord.media
 hongkong11078.discord.media
