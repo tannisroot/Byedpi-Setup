@@ -276,7 +276,7 @@ Restart=on-failure
 RestartSec=5s
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=default.target
 EOF
 
     # Перезагружаем конфигурацию systemd
@@ -287,7 +287,9 @@ EOF
         log red "Ошибка запуска службы"
         return 1
     }
-    systemctl --user enable ciadpi 2>/dev/null 
+    systemctl --user enable ciadpi 2>/dev/null
+    user_name=$(whoami)
+    loginctl enable-linger $user_name
     log green "Служба добавлена в автозапуск"
     return 0
 }
@@ -331,7 +333,7 @@ Restart=on-failure
 RestartSec=5s
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=default.target
 EOF
         log green "Запускаем службу..."
         { systemctl --user daemon-reload && systemctl --user restart ciadpitest; } || {
