@@ -22,6 +22,7 @@ rr4---sn-jvhnu5g-c35d.googlevideo.com
 rr1---sn-q4fl6n6y.googlevideo.com
 rr2---sn-hgn7ynek.googlevideo.com
 r1---sn-8ph2xajvh-3w5s.googlevideo.com
+rr1---sn-hpaxjvh-v8cl.googlevideo.com
 googleapis.com
 gstatic.com
 play.google.com
