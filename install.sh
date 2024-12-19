@@ -264,14 +264,21 @@ update_service() {
     safe_mkdir_no_rm "$(dirname "$CONFIG_FILE")"
     echo "$setting" > "$CONFIG_FILE"
     # Создаем службу systemd
+    cat > "$HOME/.config/byedpi.conf" <<EOF
+SEL_PORT="$port"
+SEL_SETTINGS="$setting"
+EOF
+
     cat > "$HOME/.config/systemd/user/ciadpi.service" <<EOF
 [Unit]
 Description=ByeDPI Proxy Service
-After=network.target
+Documentation=https://github.com/fatyzzz/Byedpi-Setup
+Wants=network-online.target
+After=network-online.target nss-lookup.target
 
 [Service]
-WorkingDirectory=$BYEDPI_DIR/
-ExecStart=$BYEDPI_DIR/ciadpi-core --ip 127.0.0.1 --port $port $setting
+EnvironmentFile=-%h/.config/byedpi.conf
+ExecStart=%h/ciadpi/ciadpi-core --ip 127.0.0.1 --port \$SEL_PORT \$SEL_SETTINGS
 Restart=on-failure
 RestartSec=5s
 
@@ -321,14 +328,20 @@ test_configurations() {
         log yellow "Тестирование настройки [$setting_number/${#settings[@]}]"
         log green "Настройка: $setting"
         # Создаем службу
+        cat > "$HOME/.config/byedpitest.conf" <<EOF
+SEL_PORT="$port_test"
+SEL_SETTINGS="$setting"
+EOF
         cat > "$HOME/.config/systemd/user/ciadpitest.service" <<EOF
 [Unit]
 Description=ByeDPI Proxy Service
-After=network.target
+Documentation=https://github.com/fatyzzz/Byedpi-Setup
+Wants=network-online.target
+After=network-online.target nss-lookup.target
 
 [Service]
-WorkingDirectory=$BYEDPI_DIR
-ExecStart=$BYEDPI_DIR/ciadpi-core --ip 127.0.0.1 --port $port_test $setting
+EnvironmentFile=%h/.config/byedpitest.conf
+ExecStart=%h/ciadpi/ciadpi-core --ip 127.0.0.1 --port \$SEL_PORT \$SEL_SETTINGS
 Restart=on-failure
 RestartSec=5s
 
@@ -423,6 +436,7 @@ EOF
         
         log yellow "Удаляем тестовую функцию"
         rm $HOME/.config/systemd/user/ciadpitest.service
+        rm $HOME/.config/byedpitest.conf
 
         results+=("$setting#$success_rate#$success_count#$total_count#${#failed_links[@]}")
 
