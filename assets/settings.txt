@@ -36,3 +36,6 @@
 -Kt,h -s3+s -q3+s -f-1 --md5sig -n www.google.com -An -Ku -a5 -An
 -Kt,h -s6+n -d9+n -d18+n -q6+hn -f-1 --md5sig -As -s443+s -d80+s -An -Ku -a5 -An
 -Kt,h -o3+sn -q4+h -b8999 -f-1 --md5sig -As -s443+s -d80+s -An -Ku -a5 -An
+-Kt,h -s8+h -d10+hn -f-1 --md5sig -Asn -Ku -a5 -An
+-Kt,h -s5 -d10+sh -f-1 --md5sig -Asn -Ku -a5 -An
+-Kt,h -s4 -q6+n -f-1 --md5sig -Asn -Ku -a5 -An
