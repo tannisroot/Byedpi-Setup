@@ -508,7 +508,7 @@ EOF
             if [[ -f $HOME/.config/systemd/user/ciadpi.service ]]; then
                 log yellow "Служба ciadpi уже запущена."
                 port_test=$(select_port_test)
-                port=$(grep -oP '(?<=--port )\d+' "$HOME/.config/systemd/user/ciadpi.service")
+                port=$(grep -oP '(?<=SEL_PORT=")\d+(?=")' "$HOME/.config/byedpi.conf")
             else
                 port=$(select_port)
                 port_test=$port
