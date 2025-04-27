@@ -1,3 +1,7 @@
+--oob 1 --split 2 --mod-http h,d --auto torst --fake -1 --tlsrec 3+s --md5sig --auto none
+--disorder 1 --split 3+s --fake -1 --ttl 4 --proto tls --auto=none
+-s1 -q1 -Y -Ar -s5 -o25000+s -At -f-1 -r1+s -As -s1 -o1+s -s-1 -An -b+500
+-o1 -o25+s -T3 -At --tlsrec 1+s
 -Kt,h -n ya.ru -f7 --md5sig -d1 -s0+s -s3+s -s6+s -s9+s -s12+s -s15+s -s20+s -o10000+s -s30+s -An -Ku -a5 -An
 -Kt,h -q1+s -s29+s -o5+s -f-1 --md5sig -Asn -Ku -a5 -An
 -Kt,h -n www.google.com -d 1+s -O 1 -s 25+s -t 5 -An -Ku -a5 -An
