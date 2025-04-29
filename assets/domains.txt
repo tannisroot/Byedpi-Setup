@@ -50,3 +50,4 @@ rr4---sn-pgpq5-hjme.googlevideo.com
 r1---sn-5goeenez.googlevideo.com
 rr1---sn-pgpq5-hjml.googlevideo.com
 android.googleapis.com
+media.sys.truenas.net
