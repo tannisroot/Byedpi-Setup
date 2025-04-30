@@ -43,6 +43,7 @@ notifications-pa.googleapis.com
 api.crowdsec.net
 zona.media
 api.github.com
+github.com
 registry-1.docker.io
 r15---sn-n8v7znss.googlevideo.com
 rr4---sn-pgpq5-hjme.googlevideo.com
